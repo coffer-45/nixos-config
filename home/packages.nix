@@ -26,6 +26,7 @@
     zoxide
 
     # Development and documents
+    codex # OpenAI Codex CLI, managed by Nix (no global npm installation)
     cmake
     gcc
     gh
@@ -38,7 +39,7 @@
     cargo
     typst
     tinymist
-    texlive.combined.scheme-full
+    texliveFull
     zathura
 
     # Multimedia and Wayland utilities
@@ -49,9 +50,7 @@
     slurp
 
     # Desktop integration
-    gnome-disk-utility
-    gnome-keyring
-    gvfs
+    # GNOME Disks, GVfs and GNOME Keyring are enabled by the host modules.
     libsecret
     localsend
     nautilus

@@ -21,8 +21,15 @@
   };
 
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     auto-optimise-store = true;
+    extra-substituters = [ "https://noctalia.cachix.org" ];
+    extra-trusted-public-keys = [
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+    ];
   };
   nix.gc = {
     automatic = true;
@@ -34,15 +41,22 @@
   nixpkgs.config.allowUnfree = true;
 
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Keep GDM as the login screen: it is familiar from the current GNOME setup
   # and exposes the Niri session without installing the GNOME desktop.
   services.displayManager.gdm.enable = true;
+  services.displayManager.defaultSession = "niri";
   services.desktopManager.gnome.enable = false;
 
   programs.niri.enable = true;
   security.polkit.enable = true;
+  security.rtkit.enable = true;
+
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+  programs.gnome-disks.enable = true;
 
   # Provides the Secret Service for applications such as browsers and VS Code.
   # The NixOS module owns its D-Bus/PAM integration; do not start a second
@@ -68,7 +82,10 @@
     enable32Bit = true;
   };
 
-  services.xserver.videoDrivers = [ "amdgpu" "nvidia" ];
+  services.xserver.videoDrivers = [
+    "amdgpu"
+    "nvidia"
+  ];
 
   # Laptop GPU layout detected on the current CachyOS installation:
   # AMD Lucienne iGPU at 05:00.0 and RTX 3050 Ti Mobile at 01:00.0.
@@ -96,7 +113,13 @@
     isNormalUser = true;
     description = "drew";
     shell = pkgs.fish;
-    extraGroups = [ "wheel" "networkmanager" "audio" "video" "docker" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "audio"
+      "video"
+      "docker"
+    ];
   };
   programs.fish.enable = true;
 
@@ -104,6 +127,9 @@
     git
     vim
     wget
+    xwayland-satellite
+    pciutils
+    mesa-demos # glxinfo: compare the default renderer and PRIME offload
   ];
 
   home-manager = {

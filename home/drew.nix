@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ inputs, ... }:
 
 {
   imports = [
@@ -22,7 +22,7 @@
 
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       init.defaultBranch = "main";
       pull.rebase = false;
     };
@@ -31,7 +31,7 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#acer-a715-42g";
+      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#acer-a715-42g --no-update-lock-file";
       update = "sudo nix flake update --flake /etc/nixos";
     };
   };
