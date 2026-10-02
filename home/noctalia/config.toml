@@ -1,0 +1,7 @@
+# Declarative base configuration. Settings changed in Noctalia's GUI are
+# stored separately in ~/.local/state/noctalia/settings.toml and take priority.
+
+[theme]
+mode = "dark"
+source = "builtin"
+builtin = "Catppuccin"

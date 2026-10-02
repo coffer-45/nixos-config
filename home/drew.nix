@@ -3,6 +3,7 @@
 {
   imports = [
     inputs.noctalia.homeModules.default
+    ./noctalia.nix
     ./packages.nix
     ./niri.nix
   ];
@@ -33,19 +34,6 @@
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#acer-a715-42g --no-update-lock-file";
       update = "sudo nix flake update --flake /etc/nixos";
-    };
-  };
-
-  # This is Noctalia v5, the actively developed successor to the legacy
-  # Quickshell-based project called "Noctalia Shell".
-  programs.noctalia = {
-    enable = true;
-    settings = {
-      theme = {
-        mode = "dark";
-        source = "builtin";
-        builtin = "Catppuccin";
-      };
     };
   };
 }

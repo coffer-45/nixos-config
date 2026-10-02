@@ -156,6 +156,30 @@ USB mounting, audio, locking/unlocking, and suspend/resume on the real laptop.
 The main keys are `Super+Enter` (terminal), `Super+Space` (launcher),
 `Super+S` (control center), `Super+Q` (close window), and `Alt+Shift` (layout).
 
+## Noctalia configuration
+
+The declarative base lives in `home/noctalia/config.toml`. Noctalia v5 stores
+changes made in its GUI separately in
+`~/.local/state/noctalia/settings.toml`; those runtime overrides take priority
+over the tracked file.
+
+To transfer your current GUI configuration, export the **merged user config**
+on the old system. Do not export `full`: it would unnecessarily pin all of
+Noctalia's built-in defaults.
+
+```bash
+cd /path/to/NixOS
+noctalia config export > /tmp/noctalia-config.toml
+noctalia config validate /tmp/noctalia-config.toml
+cp /tmp/noctalia-config.toml home/noctalia/config.toml
+git diff -- home/noctalia/config.toml
+```
+
+Commit the result only after reviewing it. Noctalia's Home Manager module also
+validates this file while building the configuration. After a rebuild, later
+GUI changes remain mutable in the state file; export again when you want to
+make them part of the declarative base.
+
 ## Codex CLI
 
 `codex` is provided by nixpkgs through `home.packages`. No global npm install

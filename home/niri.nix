@@ -1,10 +1,20 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  alacritty = lib.getExe pkgs.alacritty;
+  niri = lib.getExe pkgs.niri;
+  noctalia = lib.getExe config.programs.noctalia.package;
+  xwaylandSatellite = lib.getExe pkgs.xwayland-satellite;
+
   niriConfig = pkgs.writeTextFile {
     name = "niri-config.kdl";
     checkPhase = ''
-      ${pkgs.niri}/bin/niri validate --config "$out"
+      ${niri} validate --config "$out"
     '';
     text = ''
       // Generated declaratively by Home Manager. Niri live-reloads this file.
@@ -47,7 +57,11 @@ let
           backdrop-color "#1e1e2e"
       }
 
-      spawn-at-startup "noctalia"
+      xwayland-satellite {
+          path "${xwaylandSatellite}"
+      }
+
+      spawn-at-startup "${noctalia}"
       window-rule {
           geometry-corner-radius 12
           clip-to-geometry true
@@ -67,21 +81,21 @@ let
       }
 
       binds {
-          Mod+Return { spawn "alacritty"; }
+          Mod+Return { spawn "${alacritty}"; }
           Mod+Q { close-window; }
           Mod+Shift+Q { quit; }
 
           // Noctalia panels.
-          Mod+Space { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
-          Mod+S { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
-          Mod+Comma { spawn "noctalia" "msg" "settings-toggle"; }
-          Alt+Tab { spawn "noctalia" "msg" "window-switcher"; }
+          Mod+Space { spawn "${noctalia}" "msg" "panel-toggle" "launcher"; }
+          Mod+S { spawn "${noctalia}" "msg" "panel-toggle" "control-center"; }
+          Mod+Comma { spawn "${noctalia}" "msg" "settings-toggle"; }
+          Alt+Tab { spawn "${noctalia}" "msg" "window-switcher"; }
 
-          XF86AudioRaiseVolume { spawn "noctalia" "msg" "volume-up"; }
-          XF86AudioLowerVolume { spawn "noctalia" "msg" "volume-down"; }
-          XF86AudioMute { spawn "noctalia" "msg" "volume-mute"; }
-          XF86MonBrightnessUp { spawn "noctalia" "msg" "brightness-up"; }
-          XF86MonBrightnessDown { spawn "noctalia" "msg" "brightness-down"; }
+          XF86AudioRaiseVolume { spawn "${noctalia}" "msg" "volume-up"; }
+          XF86AudioLowerVolume { spawn "${noctalia}" "msg" "volume-down"; }
+          XF86AudioMute { spawn "${noctalia}" "msg" "volume-mute"; }
+          XF86MonBrightnessUp { spawn "${noctalia}" "msg" "brightness-up"; }
+          XF86MonBrightnessDown { spawn "${noctalia}" "msg" "brightness-down"; }
 
           Mod+H { focus-column-left; }
           Mod+J { focus-window-down; }
