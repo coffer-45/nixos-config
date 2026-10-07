@@ -1,7 +1,79 @@
-# Declarative base configuration. Settings changed in Noctalia's GUI are
-# stored separately in ~/.local/state/noctalia/settings.toml and take priority.
+# Dark pixel street style adapted from AngelOS's Noctalia setup.
+# @WALLPAPER@ is replaced with the Nix store path during evaluation.
+
+[shell]
+setup_wizard_enabled = false
+font_family = "CozetteVector"
+corner_radius_scale = 1.15
+
+    [shell.panel]
+    transparency_mode = "glass"
+
+[accessibility]
+ui_scale = 1.1
+
+[backdrop]
+enabled = true
+blur_intensity = 0.14
+
+[wallpaper.default]
+path = "@WALLPAPER@"
 
 [theme]
 mode = "dark"
-source = "builtin"
-builtin = "Catppuccin"
+source = "wallpaper"
+builtin = "Gruvbox"
+wallpaper_scheme = "m3-content"
+
+[bar.default]
+start = [ "launcher", "wallpaper", "workspaces", "active_window" ]
+center = [ "media", "clock", "date" ]
+end = [ "tray", "notifications", "network", "bluetooth", "keyboard_layout", "battery", "volume", "control-center", "session" ]
+position = "top"
+margin_edge = 9
+margin_ends = 16
+thickness = 42
+padding = 10
+widget_spacing = 8
+radius = 14
+background_opacity = 0.82
+border = "outline"
+border_width = 1
+shadow = true
+capsule = true
+capsule_fill = "surface_variant"
+capsule_opacity = 0.45
+capsule_padding = 6
+font_scale = 1.08
+scale = 1.05
+
+[widget.active_window]
+type = "active_window"
+min_length = 60
+max_length = 180
+
+[widget.media]
+type = "media"
+min_length = 60
+max_length = 160
+hide_when_no_media = true
+
+[widget.clock]
+type = "clock"
+format = "{:%H:%M}"
+font_scale = 1.12
+
+[widget.date]
+type = "clock"
+format = "{:%a %d %b}"
+font_scale = 0.9
+
+[widget.battery]
+type = "battery"
+display_mode = "glyph"
+show_label = true
+
+[nightlight]
+enabled = true
+temperature_day = 6600
+temperature_night = 3900

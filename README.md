@@ -1,6 +1,6 @@
 # NixOS migration configuration
 
-Configuration for an Acer Aspire A715-42G: Niri + Noctalia v5, GDM,
+Configuration for an Acer Aspire A715-42G: Niri + Noctalia v5 and Noctalia Greeter,
 PipeWire, Steam, Docker, GNOME Keyring, zram, AMD iGPU and NVIDIA RTX 3050 Ti
 PRIME offload. User applications, including OpenAI Codex CLI, live in
 `home/packages.nix` and are installed through Home Manager.
@@ -126,10 +126,10 @@ Btrfs subvolumes and NixOS generations do not replace backups of your files.
    In a Live ISO use `nixos-install`, not `nixos-rebuild switch`.
 
 8. Set the user password before rebooting, then boot the new disk and select
-   **Niri** in GDM:
+   **Niri** in Noctalia Greeter:
 
    ```bash
-   sudo nixos-enter --root /mnt -c 'passwd drew'
+   sudo nixos-enter --root /mnt -c 'passwd andrey'
    sudo reboot
    ```
 
@@ -154,9 +154,41 @@ by itself prove graphics offload. Test Steam, screen sharing, Wi-Fi, Bluetooth,
 USB mounting, audio, locking/unlocking, and suspend/resume on the real laptop.
 
 The main keys are `Super+Enter` (terminal), `Super+Space` (launcher),
-`Super+S` (control center), `Super+Q` (close window), and `Alt+Shift` (layout).
+`Super+S` (control center), `Super+Q` (close window), and `Alt+Shift`
+(US → Ukrainian → Russian keyboard layouts).
 
 ## Noctalia configuration
+
+### Dark pixel street rice
+
+`home/visuals.nix` installs the Pixeloid/Cozette fonts, Pixora icons, GTK
+appearance, the matching Kitty palette, and a themed Fastfetch config.
+`home/niri.nix` adds the AngelOS inspired window controls and
+screenshot/OCR/recording bindings. Noctalia stays
+the only desktop shell. The wallpaper in `home/assets/wallpapers/` was generated
+for this configuration; the fonts and icons are from AngelOS and retain their
+upstream licenses in `home/assets/fonts/OFL-1.1.txt` and
+`home/assets/THIRD-PARTY.md`.
+
+Useful keys: `Super+T` or `Super+Enter` for Kitty, `Super+E` for Files,
+`Super+Space` for the launcher, `Super+Tab` for overview, `Super+W` for tabs,
+`Super+Shift+Space` for floating, `Super+F` for fullscreen,
+`Super+Shift+S` for a region screenshot, `Super+Shift+T` for OCR to clipboard,
+and `Super+Shift+R` to start or stop region recording. `Super+Shift+Esc`
+shows the full shortcut overlay. `Super+Ctrl+1` through `9` move a column to a
+workspace; `Super+Shift+Q` opens Noctalia's power menu, and `Ctrl+Alt+Delete`
+quits Niri.
+
+Noctalia's saved GUI overrides can hide new settings from the declarative TOML.
+After activating this configuration, move
+`~/.local/state/noctalia/settings.toml` to a backup and restart Noctalia if
+you want the entire rice exactly as tracked. Keep that backup if you have
+personal widget/lockscreen settings you want to bring back selectively.
+
+On the current machine, this repository is the source of the running
+`acer-a715-42g` generation; `/etc/nixos` still contains an older `nixos`
+flake. Use `path:/home/andrey/nixos-config#acer-a715-42g` for rebuilds. The
+`path:` form includes newly added assets that are not yet tracked by Git.
 
 The declarative base lives in `home/noctalia/config.toml`. Noctalia v5 stores
 changes made in its GUI separately in
@@ -196,28 +228,42 @@ Keep login credentials out of the repository and Nix expressions.
 
 ## Updates and recovery
 
-Keep the working repository in `/etc/nixos`, including `flake.lock` and the
-generated host hardware configuration. Track new files in Git before using
-the normal Git-backed flake path; new untracked Nix files are otherwise omitted.
+Keep the working repository in `/home/andrey/nixos-config`, including
+`flake.lock` and the generated host hardware configuration. The active system
+uses this path; `/etc/nixos` is currently an older, different flake. The `path:`
+flake form includes untracked assets when building.
 Commit a known-working configuration before updating dependencies.
 
-The fish alias `update` only updates `flake.lock`; it does not switch systems.
-The `rebuild` alias switches using the existing lock and refuses implicit input
-updates. Run checks and a build first:
+For the GDM → Noctalia Greeter migration, stage the new system for the next
+boot so the current graphical session stays available:
 
 ```bash
-cd /etc/nixos
-sudo nix flake update
-sudo nix flake check --accept-flake-config --no-update-lock-file
-sudo nixos-rebuild build --flake .#acer-a715-42g --no-update-lock-file
+sudo nixos-rebuild boot --flake path:/home/andrey/nixos-config#acer-a715-42g --no-update-lock-file --option accept-flake-config true
+sudo reboot
+```
+
+The greeter defaults to the `andrey` account and Niri session. If it cannot
+start, choose the previous generation in systemd-boot and inspect `greetd` from
+a TTY with `journalctl -b -u greetd`.
+
+The fish alias `update` only updates `flake.lock`; it does not switch systems.
+The `rebuild` fish function switches using the existing lock, then keeps the
+current and previous system generations if the switch succeeds. It refuses
+implicit input updates. Run checks and a build first:
+
+```bash
+cd /home/andrey/nixos-config
+nix flake update --flake path:.
+nix flake check --accept-flake-config --no-update-lock-file path:.
+sudo nixos-rebuild build --flake path:.#acer-a715-42g --no-update-lock-file --option accept-flake-config true
 rebuild
 ```
 
 If an update fails before activation, fix it or restore the previous lock from
 Git. For a bad activated generation, boot a previous generation from the
 systemd-boot menu or use `sudo nixos-rebuild switch --rollback`. Garbage
-collection removes old generations after 14 days; the boot menu is limited to
-10 entries. Neither method rolls back personal data or Docker volumes.
+collection removes unreferenced store paths weekly; the boot menu is limited to
+2 entries. Neither method rolls back personal data or Docker volumes.
 
 Docker runs as a system service, and membership in the `docker` group grants
 root-equivalent access. Do not share its socket with untrusted applications.

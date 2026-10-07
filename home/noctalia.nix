@@ -1,10 +1,15 @@
-{ ... }:
+{ pkgs, ... }:
 
+let
+  wallpaper = ./assets/wallpapers/rainy-pixel-street.png;
+  settings = pkgs.writeText "noctalia-pixel-street.toml" (
+    builtins.replaceStrings [ "@WALLPAPER@" ] [ "${wallpaper}" ]
+      (builtins.readFile ./noctalia/config.toml)
+  );
+in
 {
-  # Noctalia v5 accepts a TOML path directly. Keeping the application config
-  # as TOML makes a merged GUI export easy to review and commit.
   programs.noctalia = {
     enable = true;
-    settings = ./noctalia/config.toml;
+    inherit settings;
   };
 }

@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     # Everyday tools
-    alacritty
     bat
     btop
     brightnessctl
@@ -39,7 +38,6 @@
     cargo
     typst
     tinymist
-    texliveFull
     zathura
 
     # Multimedia and Wayland utilities
@@ -48,6 +46,8 @@
     imagemagick
     mpv
     slurp
+    tesseract
+    wf-recorder
 
     # Desktop integration
     # GNOME Disks, GVfs and GNOME Keyring are enabled by the host modules.
@@ -70,6 +70,7 @@
     obsidian
     obs-studio
     pavucontrol
+    telegram-desktop
     vlc
     vscode
   ];

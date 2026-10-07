@@ -3,8 +3,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./disko.nix
-    inputs.disko.nixosModules.disko
     inputs.home-manager.nixosModules.default
     inputs.noctalia.nixosModules.default
   ];
@@ -16,7 +14,7 @@
   i18n.defaultLocale = "uk_UA.UTF-8";
 
   services.xserver.xkb = {
-    layout = "us,ua";
+    layout = "us,ua,ru";
     options = "grp:alt_shift_toggle";
   };
 
@@ -34,21 +32,81 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 14d";
+    # System generations are trimmed by the `rebuild` fish function.
+    # Garbage collection only removes paths no longer referenced by a profile.
+    options = "";
   };
 
   # Needed for VS Code, Discord, Steam and Obsidian in home/packages.nix.
   nixpkgs.config.allowUnfree = true;
 
   boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Keep GDM as the login screen: it is familiar from the current GNOME setup
-  # and exposes the Niri session without installing the GNOME desktop.
-  services.displayManager.gdm.enable = true;
-  services.displayManager.defaultSession = "niri";
+  # Use the same pixel-street look at login as in the Niri session.
+  services.displayManager.noctalia-greeter = {
+    enable = true;
+    cursorTheme = {
+      package = pkgs.catppuccin-cursors.mochaLavender;
+      name = "catppuccin-mocha-lavender-cursors";
+    };
+    settings = {
+      cursor.size = 32;
+      session.default = "Niri";
+      user.default = "andrey";
+      keyboard = {
+        layout = "us,ua,ru";
+        options = "grp:alt_shift_toggle";
+      };
+      appearance = {
+        scheme = "Synced";
+        theme_mode = "dark";
+        font_family = "Pixeloid Sans";
+        corner_radius_scale = 1.15;
+        hide_logo = true;
+        scheme_selector_position = "hidden";
+        wallpaper = {
+          path = "${../../home/assets/wallpapers/rainy-pixel-street.png}";
+          fill_mode = "crop";
+        };
+        palette = {
+          primary = "#b9b1cc";
+          on_primary = "#181922";
+          secondary = "#e36b78";
+          on_secondary = "#181922";
+          tertiary = "#72b7b0";
+          on_tertiary = "#181922";
+          error = "#f58b98";
+          on_error = "#181922";
+          surface = "#181922";
+          on_surface = "#fafafa";
+          surface_variant = "#242531";
+          on_surface_variant = "#b4b5b7";
+          outline = "#978ab3";
+          shadow = "#0b0c12";
+          hover = "#978ab3";
+          on_hover = "#181922";
+        };
+      };
+      clock = {
+        enabled = true;
+        position = "above-panel";
+        time_format = "{:%H:%M}";
+        date_format = "%a %d %b";
+      };
+    };
+  };
   services.desktopManager.gnome.enable = false;
+
+  fonts.packages = [
+    (pkgs.runCommand "pixel-street-fonts" { } ''
+      mkdir -p "$out/share/fonts/truetype"
+      cp ${../../home/assets/fonts/CozetteVector.ttf} "$out/share/fonts/truetype/"
+      cp ${../../home/assets/fonts/PixeloidSans.ttf} "$out/share/fonts/truetype/"
+      cp ${../../home/assets/fonts/PixeloidMono.ttf} "$out/share/fonts/truetype/"
+    '')
+  ];
 
   programs.niri.enable = true;
   security.polkit.enable = true;
@@ -69,6 +127,9 @@
     enable = true;
     recommendedServices.enable = true;
   };
+
+  # Leave the adapter off after boot; enable it manually from Noctalia.
+  hardware.bluetooth.powerOnBoot = false;
 
   services.pipewire = {
     enable = true;
@@ -109,9 +170,9 @@
   virtualisation.docker.enable = true;
   zramSwap.enable = true;
 
-  users.users.drew = {
+  users.users.andrey = {
     isNormalUser = true;
-    description = "drew";
+    description = "andrey";
     shell = pkgs.fish;
     extraGroups = [
       "wheel"
@@ -135,8 +196,10 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    # Save existing mutable Kitty/GTK files when first activating this rice.
+    backupFileExtension = "hm-backup";
     extraSpecialArgs = { inherit inputs; };
-    users.drew = import ../../home/drew.nix;
+    users.andrey = import ../../home/andrey.nix;
   };
 
   # Set this to the release used for the first actual installation and do not

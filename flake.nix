@@ -37,7 +37,7 @@
       # Build the actual generated desktop configs, including their validators.
       checks.x86_64-linux =
         let
-          home = self.nixosConfigurations.acer-a715-42g.config.home-manager.users.drew;
+          home = self.nixosConfigurations.acer-a715-42g.config.home-manager.users.andrey;
         in
         {
           niri-config = home.xdg.configFile."niri/config.kdl".source;
