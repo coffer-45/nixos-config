@@ -1,5 +1,15 @@
 { pkgs, ... }:
 
+let
+  theme = import ../theme.nix;
+  inherit (theme) colors ansi;
+  fastfetchConfig = pkgs.writeText "fastfetch.jsonc" (
+    builtins.replaceStrings
+      [ "@PRIMARY@" "@OUTLINE@" "@SECONDARY@" "@FOREGROUND@" ]
+      [ (ansi colors.primary) (ansi colors.outline) (ansi colors.secondary) (ansi colors.foreground) ]
+      (builtins.readFile ./fastfetch/config.jsonc)
+  );
+in
 {
   home.pointerCursor = {
     enable = true;
@@ -40,30 +50,8 @@
       name = "CozetteVector";
       size = 13;
     };
-    settings = {
-      background = "#181922";
-      foreground = "#fafafa";
-      cursor = "#b9b1cc";
-      selection_background = "#978ab3";
-      selection_foreground = "#181922";
-      color0 = "#181922";
-      color1 = "#e36b78";
-      color2 = "#8eaf73";
-      color3 = "#d8b56b";
-      color4 = "#b9b1cc";
-      color5 = "#978ab3";
-      color6 = "#72b7b0";
-      color7 = "#fafafa";
-      color8 = "#b4b5b7";
-      color9 = "#f58b98";
-      color10 = "#aacf93";
-      color11 = "#efd18b";
-      color12 = "#b9b1cc";
-      color13 = "#978ab3";
-      color14 = "#92d7d0";
-      color15 = "#fafafa";
+    settings = theme.kitty // {
       background_opacity = "0.8";
-      transparent_background_colors = "#181922@0.8 #242531@0.8";
       window_padding_width = 12;
       hide_window_decorations = "yes";
       confirm_os_window_close = 0;
@@ -75,5 +63,5 @@
     settings.theme_background = false;
   };
 
-  xdg.configFile."fastfetch/config.jsonc".source = ./fastfetch/config.jsonc;
+  xdg.configFile."fastfetch/config.jsonc".source = fastfetchConfig;
 }

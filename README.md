@@ -161,6 +161,10 @@ The main keys are `Super+Enter` (terminal), `Super+Space` (launcher),
 
 ### Dark pixel street rice
 
+`theme.nix` is the source of the fixed colors used by Niri, Kitty, Fastfetch,
+and the Noctalia Greeter. The Noctalia shell still derives its palette from
+the wallpaper, as configured in `home/noctalia/config.toml`.
+
 `home/visuals.nix` installs the Pixeloid/Cozette fonts, Pixora icons, GTK
 appearance, the matching Kitty palette, and a themed Fastfetch config.
 `home/niri.nix` adds the AngelOS inspired window controls and

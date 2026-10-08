@@ -30,6 +30,7 @@
     gcc
     gh
     lazygit
+    emacs-pgtk
     neovim
     nodejs
     pandoc

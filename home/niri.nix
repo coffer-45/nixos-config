@@ -6,6 +6,7 @@
 }:
 
 let
+  colors = (import ../theme.nix).colors;
   kitty = lib.getExe pkgs.kitty;
   browser = lib.getExe pkgs.firefox;
   files = lib.getExe pkgs.nautilus;
@@ -83,13 +84,13 @@ let
           border {
               on
               width 2
-              active-color "#b9b1cc"
-              inactive-color "#302b35"
+              active-color "${colors.primary}"
+              inactive-color "${colors.inactive_border}"
           }
       }
 
       overview {
-          backdrop-color "#181922"
+          backdrop-color "${colors.background}"
       }
 
       cursor {

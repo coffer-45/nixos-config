@@ -1,5 +1,8 @@
 { inputs, pkgs, ... }:
 
+let
+  theme = import ../../theme.nix;
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -70,24 +73,7 @@
           path = "${../../home/assets/wallpapers/rainy-pixel-street.png}";
           fill_mode = "crop";
         };
-        palette = {
-          primary = "#b9b1cc";
-          on_primary = "#181922";
-          secondary = "#e36b78";
-          on_secondary = "#181922";
-          tertiary = "#72b7b0";
-          on_tertiary = "#181922";
-          error = "#f58b98";
-          on_error = "#181922";
-          surface = "#181922";
-          on_surface = "#fafafa";
-          surface_variant = "#242531";
-          on_surface_variant = "#b4b5b7";
-          outline = "#978ab3";
-          shadow = "#0b0c12";
-          hover = "#978ab3";
-          on_hover = "#181922";
-        };
+        palette = theme.greeter;
       };
       clock = {
         enabled = true;
