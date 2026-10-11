@@ -27,18 +27,44 @@
     # Development and documents
     codex # OpenAI Codex CLI, managed by Nix (no global npm installation)
     cmake
+    clang-tools
     gcc
+    gdb
+    gnumake
     gh
+    graphviz
     lazygit
+    lldb
     emacs-pgtk
+    gradle
+    jdk
+    jdt-language-server
+    markdownlint-cli
+    marksman
+    maven
     neovim
+    nil
+    nixfmt
     nodejs
     pandoc
-    python3
+    plantuml
+    pyright
+    (python3.withPackages (
+      ps: with ps; [
+        debugpy
+        pytest
+      ]
+    ))
     rustc
     cargo
+    rust-analyzer
+    shellcheck
+    shfmt
     typst
     tinymist
+    vscode-langservers-extracted
+    yaml-language-server
+    dockerfile-language-server
     zathura
 
     # Multimedia and Wayland utilities
@@ -64,6 +90,8 @@
     # Fonts
     noto-fonts
     noto-fonts-color-emoji
+    nerd-fonts.symbols-only
+    symbola
 
     # Applications already used on the current installation
     discord
