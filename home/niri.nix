@@ -108,9 +108,10 @@ let
           clip-to-geometry true
       }
 
-      // Blur translucent windows except Kitty, where wallpaper should stay visible.
+      // Keep wallpaper details visible through Kitty and Emacs.
       window-rule {
           exclude app-id="^kitty$"
+          exclude app-id="^emacs$"
           background-effect {
               blur true
               xray true
@@ -121,6 +122,11 @@ let
 
       window-rule {
           match app-id="^kitty$"
+          draw-border-with-background false
+      }
+
+      window-rule {
+          match app-id="^emacs$"
           draw-border-with-background false
       }
 
