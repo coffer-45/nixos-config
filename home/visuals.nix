@@ -13,10 +13,11 @@ in
 {
   home.pointerCursor = {
     enable = true;
-    package = pkgs.catppuccin-cursors.mochaLavender;
-    name = "catppuccin-mocha-lavender-cursors";
-    size = 32;
+    package = pkgs.quintom-cursor-theme;
+    name = "Quintom_Ink";
+    size = 24;
     gtk.enable = true;
+    x11.enable = true;
   };
 
   xdg.dataFile = {
@@ -30,16 +31,24 @@ in
   fonts.fontconfig = {
     enable = true;
     defaultFonts = {
-      sansSerif = [ "Pixeloid Sans" ];
-      monospace = [ "CozetteVector" ];
+      serif = [ "Inter" ];
+      sansSerif = [ "Inter" ];
+      monospace = [ "JetBrainsMono Nerd Font" ];
     };
   };
 
   gtk = {
     enable = true;
-    iconTheme.name = "pixora";
-    font.name = "Pixeloid Sans";
-    font.size = 10;
+    theme = {
+      name = "adw-gtk3-dark";
+      package = pkgs.adw-gtk3;
+    };
+    iconTheme = {
+      name = "Tela-black-dark";
+      package = pkgs.tela-icon-theme;
+    };
+    font.name = "Inter";
+    font.size = 12;
     gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
     gtk4.extraConfig.gtk-application-prefer-dark-theme = true;
   };
@@ -47,15 +56,20 @@ in
   programs.kitty = {
     enable = true;
     font = {
-      name = "CozetteVector";
+      name = "JetBrainsMono Nerd Font";
       size = 13;
     };
     settings = theme.kitty // {
-      background_opacity = "0.8";
-      window_padding_width = 12;
+      background_opacity = "0.52";
+      cursor_shape = "beam";
+      cursor_trail = 1;
+      window_margin_width = 14;
       hide_window_decorations = "yes";
       confirm_os_window_close = 0;
     };
+    extraConfig = ''
+      include themes/noctalia.conf
+    '';
   };
 
   programs.btop = {

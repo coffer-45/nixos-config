@@ -94,8 +94,8 @@ let
       }
 
       cursor {
-          xcursor-theme "catppuccin-mocha-lavender-cursors"
-          xcursor-size 32
+          xcursor-theme "Quintom_Ink"
+          xcursor-size 24
       }
 
       xwayland-satellite {
@@ -106,6 +106,39 @@ let
       window-rule {
           geometry-corner-radius 12
           clip-to-geometry true
+      }
+
+      // Blur translucent windows except Kitty, where wallpaper should stay visible.
+      window-rule {
+          exclude app-id="^kitty$"
+          background-effect {
+              blur true
+              xray true
+              noise 0.05
+              saturation 2.4
+          }
+      }
+
+      window-rule {
+          match app-id="^kitty$"
+          draw-border-with-background false
+      }
+
+      layer-rule {
+          match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel)$"
+          background-effect {
+              blur true
+              xray false
+              noise 0.05
+              saturation 2.6
+          }
+      }
+
+      blur {
+          passes 3
+          offset 5.0
+          noise 0.04
+          saturation 1.8
       }
 
       window-rule {

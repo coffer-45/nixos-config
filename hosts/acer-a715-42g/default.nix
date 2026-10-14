@@ -51,11 +51,11 @@ in
   services.displayManager.noctalia-greeter = {
     enable = true;
     cursorTheme = {
-      package = pkgs.catppuccin-cursors.mochaLavender;
-      name = "catppuccin-mocha-lavender-cursors";
+      package = pkgs.quintom-cursor-theme;
+      name = "Quintom_Ink";
     };
     settings = {
-      cursor.size = 32;
+      cursor.size = 24;
       session.default = "Niri";
       user.default = "andrey";
       keyboard = {
@@ -65,7 +65,7 @@ in
       appearance = {
         scheme = "Synced";
         theme_mode = "dark";
-        font_family = "Pixeloid Sans";
+        font_family = "Inter";
         corner_radius_scale = 1.15;
         hide_logo = true;
         scheme_selector_position = "hidden";
@@ -85,14 +85,7 @@ in
   };
   services.desktopManager.gnome.enable = false;
 
-  fonts.packages = [
-    (pkgs.runCommand "pixel-street-fonts" { } ''
-      mkdir -p "$out/share/fonts/truetype"
-      cp ${../../home/assets/fonts/CozetteVector.ttf} "$out/share/fonts/truetype/"
-      cp ${../../home/assets/fonts/PixeloidSans.ttf} "$out/share/fonts/truetype/"
-      cp ${../../home/assets/fonts/PixeloidMono.ttf} "$out/share/fonts/truetype/"
-    '')
-  ];
+  fonts.packages = with pkgs; [ inter nerd-fonts.jetbrains-mono ];
 
   programs.niri.enable = true;
   security.polkit.enable = true;

@@ -3,49 +3,54 @@
 
 [shell]
 setup_wizard_enabled = false
-font_family = "CozetteVector"
+font_family = "Inter SemiBold"
 corner_radius_scale = 1.15
+
+    [shell.shadow]
+    direction = "down"
+    alpha = 0.52
 
     [shell.panel]
     transparency_mode = "glass"
+    background_blur = true
 
 [accessibility]
 ui_scale = 1.1
 
 [backdrop]
 enabled = true
-blur_intensity = 0.14
+blur_intensity = 0.85
+tint_intensity = 0.45
 
 [wallpaper.default]
 path = "@WALLPAPER@"
+
+[wallpaper]
+directory = "@WALLPAPER_DIRECTORY@"
 
 [theme]
 mode = "dark"
 source = "wallpaper"
 builtin = "Gruvbox"
-wallpaper_scheme = "m3-content"
+wallpaper_scheme = "m3-tonal-spot"
+
+    [theme.templates]
+    enable_builtin_templates = true
+    builtin_ids = [ "kitty" ]
 
 [bar.default]
 start = [ "launcher", "wallpaper", "workspaces", "active_window" ]
 center = [ "media", "clock", "date" ]
 end = [ "tray", "notifications", "network", "bluetooth", "keyboard_layout", "battery", "volume", "control-center", "session" ]
 position = "top"
-margin_edge = 9
-margin_ends = 16
-thickness = 42
-padding = 10
-widget_spacing = 8
-radius = 14
-background_opacity = 0.82
-border = "outline"
-border_width = 1
-shadow = true
+margin_edge = 5
+margin_ends = 19
+radius = 10
 capsule = true
-capsule_fill = "surface_variant"
-capsule_opacity = 0.45
-capsule_padding = 6
-font_scale = 1.08
-scale = 1.05
+font_family = "JetBrainsMono Nerd Font"
+font_scale = 1.05
+font_weight = 700
+scale = 1.1
 
 [widget.active_window]
 type = "active_window"
@@ -72,6 +77,12 @@ font_scale = 0.9
 type = "battery"
 display_mode = "glyph"
 show_label = true
+
+[notification]
+background_opacity = 0.78
+
+[osd]
+background_opacity = 0.78
 
 [nightlight]
 enabled = true
