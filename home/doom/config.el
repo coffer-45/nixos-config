@@ -4,11 +4,11 @@
       display-line-numbers-type 'relative
       shell-file-name (executable-find "bash"))
 
-;; Match Kitty's background opacity without fading text or UI elements.
-(add-to-list 'default-frame-alist '(alpha-background . 52))
+;; Keep text opaque while making the background 70% opaque.
+(setf (alist-get 'alpha-background default-frame-alist) 70)
 (dolist (frame (frame-list))
   (when (display-graphic-p frame)
-    (set-frame-parameter frame 'alpha-background 52)))
+    (set-frame-parameter frame 'alpha-background 70)))
 
 (add-to-list 'load-path (expand-file-name "~/.local/share/doom-vterm") t)
 
