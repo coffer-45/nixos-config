@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -46,6 +46,7 @@
     nil
     nixfmt
     nodejs
+    inputs.opencodeV2.packages.${pkgs.system}.default
     pandoc
     plantuml
     pyright
@@ -94,6 +95,7 @@
     symbola
 
     # Applications already used on the current installation
+    cisco-packet-tracer_9
     discord
     firefox
     obsidian
