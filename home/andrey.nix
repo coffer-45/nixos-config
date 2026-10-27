@@ -51,14 +51,11 @@ in
     force = true;
   };
   home.sessionPath = [
-    "$HOME/.local/state/nix/profiles/home-manager/home-path/bin"
     "$HOME/.config/emacs/bin"
   ];
 
   home.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
   };
 
   programs.git = {
