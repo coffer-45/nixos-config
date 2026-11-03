@@ -12,6 +12,9 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # Keep the installed Packet Tracer until its new installer is provided.
+    nixpkgsCisco.url = "github:NixOS/nixpkgs/3ec636362e1816bc2f0888fa0fa2c69f1bc9e504";
+
     opencodeV2.url = "github:anomalyco/opencode/v2.1.2";
 
     home-manager = {

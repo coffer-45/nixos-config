@@ -1,5 +1,27 @@
 { inputs, pkgs, ... }:
 
+let
+  # The new nixpkgs derivation requires a Cisco installer that cannot be
+  # downloaded automatically. Reuse the already installed package for now.
+  ciscoPacketTracer =
+    (import inputs.nixpkgsCisco {
+      system = pkgs.stdenv.hostPlatform.system;
+      config.allowUnfree = true;
+    }).cisco-packet-tracer_9;
+
+  # nixpkgs#581099: Discord requests OpenH264 2.5.1, but its asset cache only
+  # retains 2.7.0. Remove this override once the fix reaches nixos-unstable.
+  discordWithOpenH264Fix = pkgs.discord.override {
+    unwrappedDiscord = pkgs.discord.passthru.unwrappedDiscord.overrideAttrs (old: {
+      postInstall = (old.postInstall or "") + ''
+        core="$out/opt/Discord/modules/discord_desktop_core/core.asar"
+        if grep -qF libopenh264-2.5.1-linux64.7.so "$core"; then
+          sed -i 's/libopenh264-2\.5\.1-linux64\.7\.so/libopenh264-2.7.0-linux64.8.so/g' "$core"
+        fi
+      '';
+    });
+  };
+in
 {
   home.packages = with pkgs; [
     # Everyday tools
@@ -95,8 +117,8 @@
     symbola
 
     # Applications already used on the current installation
-    cisco-packet-tracer_9
-    discord
+    ciscoPacketTracer
+    discordWithOpenH264Fix
     firefox
     obsidian
     obs-studio
